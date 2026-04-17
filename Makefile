@@ -9,7 +9,7 @@ lint: ## Run markdown lint checks
 	$(PYTHON) scripts/lint_markdown.py
 
 validate: ## Run repository validation checks
-	$(PYTHON) scripts/validate_instructions.py
+	$(PYTHON) scripts/validate_skills.py
 	$(PYTHON) scripts/validate_task_prompts.py
 	$(PYTHON) scripts/validate_agent_templates.py
 
