@@ -10,7 +10,7 @@ A curated library of skills, task prompts, and agent templates that transform Op
 into a precision engineering assistant — one spell at a time.
 
 [![CI](https://github.com/kid-sid/codex-spellbook/actions/workflows/ci.yml/badge.svg)](https://github.com/kid-sid/codex-spellbook/actions/workflows/ci.yml)
-![Skills](https://img.shields.io/badge/skills-13-blueviolet)
+![Skills](https://img.shields.io/badge/skills-15-blueviolet)
 ![Task Prompts](https://img.shields.io/badge/task%20prompts-15-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
@@ -24,7 +24,7 @@ into a precision engineering assistant — one spell at a time.
 
 | Layer | What | Count |
 | --- | --- | --- |
-| Skills | Installable Codex `SKILL.md` packages | 13 |
+| Skills | Installable Codex `SKILL.md` packages | 15 |
 | Task prompts | Reusable one-shot prompts for common engineering workflows | 15 |
 | Agent templates | Full project-level `AGENTS.md` files for common stacks | 5 |
 | Setup scripts | VM bootstrap scripts for Python, Node, Go, and Rust | 4 |
@@ -70,6 +70,8 @@ Skills are the primary artifact in this repo. Each skill lives at `skills/<name>
 | `codex-skill-generator` | Creating or refining Codex skills that follow this repo's format and trigger cleanly |
 | `codex-orchestration` | Explaining Codex's skills discovery paths, hooks.json events, notify config, and AGENTS.md precedence; use before installing skills or wiring hooks |
 | `openai-api` | Integrating OpenAI or Codex models with current model selection and Responses API patterns |
+| `integration-testing` | Testing how multiple parts of a system work together without mocks, including DB and API clients |
+| `end-to-end-testing` | Testing complete user journeys as a black box using browser automation or mobile testing |
 
 ## Task Prompts
 
