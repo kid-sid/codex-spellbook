@@ -206,3 +206,15 @@ marimo/_static/
 marimo/_lsp/
 __marimo__/
 .tmp-reference/
+
+# Codex / agent local state
+.codex/
+.mcp_history.json
+.mcp_memory.json
+
+# Release artifacts
+*.tgz
+
+# OS junk
+.DS_Store
+Thumbs.db
