@@ -1,14 +1,30 @@
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+<div align="center">
+
+<img src="assets/codex-logo.png" alt="codex-spellbook logo" width="180" />
 
 # codex-spellbook
 
-`codex-spellbook` is a curated library of Codex skills, reusable task prompts, setup scripts, and stack-specific agent templates. It is the Codex equivalent of a spellbook repo such as `claude-spellbook`: install the skills once, then reuse them across API design, development, testing, security, infrastructure, and review work.
+**Ship faster. Review smarter. Build with intent.**
+
+A curated library of skills, task prompts, and agent templates that transform OpenAI Codex  
+into a precision engineering assistant — one spell at a time.
+
+[![CI](https://github.com/kid-sid/codex-spellbook/actions/workflows/ci.yml/badge.svg)](https://github.com/kid-sid/codex-spellbook/actions/workflows/ci.yml)
+![Skills](https://img.shields.io/badge/skills-13-blueviolet)
+![Task Prompts](https://img.shields.io/badge/task%20prompts-15-blue)
+![License](https://img.shields.io/badge/license-MIT-green)
+
+*Each skill is a spell. Cast wisely.*
+
+</div>
+
+---
 
 ## What's In The Box
 
 | Layer | What | Count |
 | --- | --- | --- |
-| Skills | Installable Codex `SKILL.md` packages | 12 |
+| Skills | Installable Codex `SKILL.md` packages | 13 |
 | Task prompts | Reusable one-shot prompts for common engineering workflows | 15 |
 | Agent templates | Full project-level `AGENTS.md` files for common stacks | 5 |
 | Setup scripts | VM bootstrap scripts for Python, Node, Go, and Rust | 4 |
@@ -16,129 +32,22 @@
 
 ## Quick Start
 
-### 1. Install skills into Codex
-
-Copy the skill folders you want into your Codex skills directory:
-
 ```bash
-# Install one skill
-cp -r skills/security "${CODEX_HOME:-$HOME/.codex}/skills/"
-
-# Install all skills
-cp -r skills/* "${CODEX_HOME:-$HOME/.codex}/skills/"
+# Clone and install all skills globally (works across every repo)
+git clone https://github.com/kid-sid/codex-spellbook.git
+mkdir -p "$HOME/.agents/skills"
+cp -r codex-spellbook/skills/* "$HOME/.agents/skills/"
 ```
 
-Codex discovers them automatically in later sessions.
+Then open any repo in Codex and ask naturally — skills activate on their own:
 
-### 2. Start using the skills
-
-You do not call most skills manually. Just ask Codex to do the task naturally:
-
-```text
+```
 Design a REST API for user billing with cursor pagination.
 Review this PR for security issues and missing tests.
-Add strict types to src/payments/service.ts.
 Write a safe migration for adding org_id to invoices.
 ```
 
-Codex will load the relevant skills based on the task.
-
-### 3. Add project-level instructions with an agent template
-
-1. Pick the closest file in `agents/*.agents.md`.
-2. Copy it into your target repository as `AGENTS.md`.
-3. Adjust `## Environment Setup` for project-specific tools.
-
-Example:
-
-```bash
-cp agents/typescript-api.agents.md /path/to/your-project/AGENTS.md
-```
-
-Use this when you want Codex to follow project-wide rules every session.
-
-### 4. Run a reusable task prompt
-
-1. Open a prompt from `task-prompts/**`.
-2. Replace every `$UPPERCASE` placeholder with project-specific values.
-3. Submit the prompt directly to Codex in the target repository.
-
-Example:
-
-```text
-Use task-prompts/review/pr-review.md against the current branch diff.
-```
-
-### 5. Use environment setup scripts when a project needs bootstrapping
-
-The scripts in `setup-scripts/` are meant to be called from a project `AGENTS.md` under `## Environment Setup`.
-
-Example:
-
-```bash
-bash setup-scripts/python.sh
-```
-
-### 6. Hooks
-
-This repo now ships reusable hook scripts under `hooks/`.
-
-Use them to wire up:
-
-- format-on-edit behavior
-- validation after docs changes
-- blocking `git push --force`
-- warnings for destructive shell commands
-
-Start here:
-
-```bash
-cp -r hooks /path/to/your-project/
-```
-
-Then point your Codex hook events at the scripts in `hooks/scripts/`.
-
-See [hooks/README.md](/C:/Users/Sidhartha/Desktop/codex-spellbook/hooks/README.md) for the full list and setup examples.
-
-## Using This In Codex
-
-### Global install
-
-Install skills once into your Codex home directory:
-
-```bash
-cp -r skills/* "${CODEX_HOME:-$HOME/.codex}/skills/"
-```
-
-Best for:
-
-- personal default toolkit
-- repeated use across many repos
-- keeping domain guidance available everywhere
-
-### Project install
-
-Copy only the skills and template you want into a specific project:
-
-```bash
-mkdir -p /path/to/project/.codex/skills
-cp -r skills/security /path/to/project/.codex/skills/
-cp agents/python-api.agents.md /path/to/project/AGENTS.md
-```
-
-Best for:
-
-- team-specific repos
-- tighter project scope
-- avoiding unused skills in a single codebase
-
-### Typical workflow
-
-1. Install the skills you want.
-2. Add an `AGENTS.md` file to the project if you want persistent project rules.
-3. Start Codex in the target repo.
-4. Ask for the task directly in normal language.
-5. Use a task prompt only when you want a repeatable, highly structured request.
+**Full setup guide** (project installs, hooks, task prompts, agent templates): [SETUP.md](SETUP.md)
 
 ## Skills
 
@@ -159,6 +68,7 @@ Skills are the primary artifact in this repo. Each skill lives at `skills/<name>
 | `docker` | Writing or reviewing Dockerfiles, build layers, runtime hardening, and healthchecks |
 | `database` | Designing schemas, migrations, indexes, transaction scope, or delete strategy |
 | `codex-skill-generator` | Creating or refining Codex skills that follow this repo's format and trigger cleanly |
+| `codex-orchestration` | Explaining Codex's skills discovery paths, hooks.json events, notify config, and AGENTS.md precedence; use before installing skills or wiring hooks |
 | `openai-api` | Integrating OpenAI or Codex models with current model selection and Responses API patterns |
 
 ## Task Prompts

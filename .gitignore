@@ -209,6 +209,7 @@ __marimo__/
 
 # Codex / agent local state
 .codex/
+.claude/
 .mcp_history.json
 .mcp_memory.json
 

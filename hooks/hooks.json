@@ -1,0 +1,35 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "hooks/scripts/guard_force_push.sh",
+            "statusMessage": "Checking for unsafe git push --force",
+            "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "hooks/scripts/warn_rm_rf.sh",
+            "statusMessage": "Scanning shell command for rm -rf",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "hooks/scripts/validate_spellbook.sh",
+            "statusMessage": "Validating spellbook structure",
+            "timeout": 120
+          }
+        ]
+      }
+    ]
+  }
+}

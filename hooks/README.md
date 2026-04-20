@@ -1,71 +1,92 @@
 # Hooks
 
-This repo ships reusable hook scripts for common Codex workflows:
+Codex CLI exposes two extensibility mechanisms that this repo targets:
 
-- format files after edits
-- block unsafe git pushes
-- warn on destructive shell commands
-- run repo validation after markdown changes
+| Mechanism | Status | Events | Config |
+| --- | --- | --- | --- |
+| `hooks.json` | Experimental, gated | `SessionStart`, `PreToolUse`, `PostToolUse`, `UserPromptSubmit`, `Stop` | `~/.codex/hooks.json` or `<repo>/.codex/hooks.json` |
+| `notify` | Stable | `agent-turn-complete` only | `notify = [...]` in `~/.codex/config.toml` |
 
-## Important
+Scripts in `hooks/scripts/` are the executables; the wiring that invokes them lives in `hooks/hooks.json` (for hook events) or `config.toml` (for notify).
 
-Codex hook configuration can vary by runtime and version. This repo therefore ships hook scripts, not a single hard-coded config file.
+## Limits to know
 
-Use these scripts by pointing your Codex hook events at the commands below.
+- `PreToolUse` and `PostToolUse` currently match the **Bash** tool only. Format-on-edit style hooks will not fire on file writes; use `pre-commit` or a `Makefile` target instead.
+- Hook scripts receive a JSON payload on **stdin** (fields include `session_id`, `cwd`, `hook_event_name`, `tool_input`, `turn_id`). They do not receive shell arguments the way CI hooks often do.
+- `hooks.json` requires enabling in `config.toml`:
+  ```toml
+  [features]
+  codex_hooks = true
+  ```
+- Exit code `2` from a `PreToolUse` hook blocks the tool call. Exit code `0` allows it. Non-zero other codes surface as errors.
 
 ## Available Scripts
 
-| Script | Use For |
-| --- | --- |
-| `hooks/scripts/format_markdown.sh` | Format markdown files with `markdownlint --fix` when available |
-| `hooks/scripts/format_python.sh` | Format Python files with `ruff --fix` and `black` when available |
-| `hooks/scripts/format_web.sh` | Format JS, TS, JSON, and Markdown files with `prettier --write` when available |
-| `hooks/scripts/guard_force_push.sh` | Block `git push --force` unless `--force-with-lease` is used |
-| `hooks/scripts/warn_rm_rf.sh` | Print a warning when a destructive `rm -rf` command is attempted |
-| `hooks/scripts/validate_spellbook.sh` | Run local spellbook validation scripts when Python is available |
+| Script | Intended Event | Use For |
+| --- | --- | --- |
+| `hooks/scripts/guard_force_push.sh` | `PreToolUse` (Bash) | Block `git push --force` unless `--force-with-lease` is used |
+| `hooks/scripts/warn_rm_rf.sh` | `PreToolUse` (Bash) | Print a warning when `rm -rf` is attempted |
+| `hooks/scripts/validate_spellbook.sh` | `Stop` | Run repo validation scripts at the end of a turn |
+| `hooks/scripts/format_markdown.sh` | **Not a Codex hook** - use `pre-commit` or `make` | `markdownlint --fix` |
+| `hooks/scripts/format_python.sh` | **Not a Codex hook** - use `pre-commit` or `make` | `ruff --fix` + `black` |
+| `hooks/scripts/format_web.sh` | **Not a Codex hook** - use `pre-commit` or `make` | `prettier --write` |
 
 ## Setup
 
-### 1. Copy the scripts into the target project
+### 1. Copy the config and scripts into the target project
 
 ```bash
-cp -r hooks /path/to/your-project/
+mkdir -p /path/to/project/.codex
+cp hooks/hooks.json /path/to/project/.codex/hooks.json
+cp -r hooks/scripts /path/to/project/.codex/
 ```
 
-### 2. Point your Codex hook config at the scripts you want
-
-Examples:
+Or install globally:
 
 ```bash
-bash hooks/scripts/format_markdown.sh README.md
+mkdir -p "$HOME/.codex"
+cp hooks/hooks.json "$HOME/.codex/hooks.json"
+cp -r hooks/scripts "$HOME/.codex/"
+```
+
+### 2. Enable hooks in config.toml
+
+```toml
+# ~/.codex/config.toml
+[features]
+codex_hooks = true
+```
+
+### 3. Wire up notify separately (optional)
+
+```toml
+# ~/.codex/config.toml
+notify = ["bash", "/path/to/on-turn-complete.sh"]
+```
+
+The `notify` program receives the event JSON as `argv[1]` (a single argument), not on stdin. Fields: `type`, `thread-id`, `turn-id`, `cwd`, `input-messages`, `last-assistant-message`.
+
+## Format-on-edit alternative
+
+Do not wire `format_markdown.sh` / `format_python.sh` / `format_web.sh` to `hooks.json`. They will never fire because Codex file edits don't go through Bash. Use `pre-commit`:
+
+```yaml
+# .pre-commit-config.yaml (example)
+repos:
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: v3.1.0
+    hooks:
+      - id: prettier
+```
+
+Or invoke them manually:
+
+```bash
 bash hooks/scripts/format_python.sh src/app.py
-bash hooks/scripts/format_web.sh src/server.ts
-bash hooks/scripts/guard_force_push.sh "git push --force origin main"
-bash hooks/scripts/warn_rm_rf.sh "rm -rf build/"
-bash hooks/scripts/validate_spellbook.sh
 ```
-
-### 3. Start simple
-
-Recommended first set:
-
-- format Markdown after edits
-- format Python or web files after edits
-- block `git push --force`
-- warn on `rm -rf`
-
-## Suggested Mapping
-
-| Event Type | Script |
-| --- | --- |
-| post-edit markdown | `format_markdown.sh` |
-| post-edit python | `format_python.sh` |
-| post-edit web files | `format_web.sh` |
-| pre-shell command | `guard_force_push.sh`, `warn_rm_rf.sh` |
-| post-edit repo docs | `validate_spellbook.sh` |
 
 ## Notes
 
 - All scripts are safe no-ops when required tools are missing.
 - `validate_spellbook.sh` checks for `python3`, then `python`, and skips validation if neither exists.
-- The guard scripts operate on the shell command string you pass in.
+- Hook scripts are idempotent and safe to re-run.

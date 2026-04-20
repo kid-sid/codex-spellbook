@@ -22,7 +22,7 @@ Create focused Codex skills that trigger reliably, stay small, and encode reusab
 | Step | Do |
 | --- | --- |
 | 1 | Pick one narrow domain with clear activation triggers |
-| 2 | Write a dense `description` that says what the skill does and when to use it |
+| 2 | Write a dense `description` that says what the skill does, when to use it, AND when NOT to use it |
 | 3 | Add 6-8 verb-led items under `## When to Activate` |
 | 4 | Organize the body around decisions, examples, and checklists |
 | 5 | End with a shipping-oriented checklist |
@@ -33,7 +33,7 @@ Create focused Codex skills that trigger reliably, stay small, and encode reusab
 ```markdown
 ---
 name: kebab-case-name
-description: Dense sentence that describes what the skill does and when to use it.
+description: Dense sentence that says what the skill does, when to use it, AND when NOT to use it (scope boundary). Codex uses this for implicit activation matching.
 ---
 
 # Title
@@ -53,10 +53,11 @@ Rules:
 
 - Folder name must match `name`.
 - Frontmatter must contain only `name` and `description`.
-- Put activation hints in `description`; that is what Codex sees before loading the body.
+- Put activation hints AND scope boundaries in `description`; that is what Codex matches against for implicit invocation.
 - Include at least one decision or comparison table.
 - Include at least one `BAD` / `GOOD` pair.
 - Keep the body terse and directly operational.
+- Optionally add `agents/openai.yaml` to the skill folder to set `interface` metadata, `policy.allow_implicit_invocation`, and `dependencies.tools` (e.g. required MCP servers).
 
 ## What Good Skills Contain
 
@@ -94,7 +95,7 @@ GOOD
 ```markdown
 ---
 name: jwt-auth
-description: JWT authentication patterns for token issuance, validation, refresh rotation, and authorization checks. Use when building or reviewing bearer-token auth flows in APIs or services.
+description: JWT authentication patterns for token issuance, validation, refresh rotation, and authorization checks. Use when building or reviewing bearer-token auth flows in APIs or services. Do NOT use for session-cookie auth, OAuth provider integration, or mTLS.
 ---
 
 # JWT Auth
@@ -131,7 +132,7 @@ GOOD
 ## Checklist
 
 - [ ] Skill name is kebab-case and matches the folder
-- [ ] Description says both what the skill does and when to use it
+- [ ] Description says what the skill does, when to use it, AND when NOT to use it
 - [ ] `## When to Activate` has concrete verb-led triggers
 - [ ] At least one decision or comparison table is present
 - [ ] At least one `BAD` / `GOOD` example pair is present
