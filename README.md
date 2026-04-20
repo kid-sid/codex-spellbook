@@ -6,7 +6,7 @@
 
 **Ship faster. Review smarter. Build with intent.**
 
-A curated library of skills, task prompts, and agent templates that transform OpenAI Codex  
+A curated library of skills, task prompts, and agent templates that transform OpenAI Codex<br>
 into a precision engineering assistant — one spell at a time.
 
 [![CI](https://github.com/kid-sid/codex-spellbook/actions/workflows/ci.yml/badge.svg)](https://github.com/kid-sid/codex-spellbook/actions/workflows/ci.yml)

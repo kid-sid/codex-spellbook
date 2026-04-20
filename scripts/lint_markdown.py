@@ -7,11 +7,14 @@ import sys
 ROOT = Path(__file__).resolve().parents[1]
 
 
+EXCLUDED_DIRS = {".git", ".tmp-reference"}
+
+
 def iter_markdown_files() -> list[Path]:
     return sorted(
         path
         for path in ROOT.glob("**/*.md")
-        if ".git" not in path.parts
+        if not EXCLUDED_DIRS.intersection(path.parts)
     )
 
 
