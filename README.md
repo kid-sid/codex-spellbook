@@ -22,7 +22,13 @@ into a precision engineering assistant — one spell at a time.
 
 ## Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=kid-sid/codex-spellbook&type=Date)](https://star-history.com/#kid-sid/codex-spellbook&Date)
+<a href="https://star-history.com/#kid-sid/codex-spellbook&Date">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=kid-sid/codex-spellbook&type=Date&theme=dark" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=kid-sid/codex-spellbook&type=Date" />
+   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=kid-sid/codex-spellbook&type=Date" />
+ </picture>
+</a>
 
 ## What's In The Box
 
