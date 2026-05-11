@@ -214,3 +214,4 @@ codex-spellbook/
 ## Contributing
 
 Contribution rules, branch naming, and review expectations live in [CONTRIBUTING.md](/C:/Users/Sidhartha/Desktop/codex-spellbook/CONTRIBUTING.md).
+By participating, you agree to follow the [Code of Conduct](CODE_OF_CONDUCT.md).

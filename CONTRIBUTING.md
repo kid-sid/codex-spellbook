@@ -1,5 +1,7 @@
 # Contributing
 
+By participating in this project, you agree to follow the [Code of Conduct](CODE_OF_CONDUCT.md).
+
 ## Branch Naming
 
 - `feat/skill-<name>` for new skills
