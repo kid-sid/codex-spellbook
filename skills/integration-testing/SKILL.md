@@ -48,7 +48,7 @@ GOOD
 def test_get_user_orders(db_session, user_factory, order_factory):
     user = user_factory.create()
     order_factory.create(user_id=user.id)
-    
+
     orders = get_user_orders(user_id=user.id)
     assert len(orders) == 1
 ```
@@ -74,3 +74,4 @@ def test_get_user_orders(db_session, user_factory, order_factory):
 - [ ] Asynchronous background tasks are awaited before assertion
 - [ ] Migrations are run on the test database before the suite starts
 - [ ] Environment variables for integration are isolated from local dev
+

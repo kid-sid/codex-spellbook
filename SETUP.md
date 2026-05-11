@@ -8,6 +8,8 @@ Three paths depending on how widely you want the spellbook available.
 
 Everything available in every repo you open, zero per-project config needed.
 
+### macOS / Linux (bash)
+
 ```bash
 # 1. Clone the spellbook
 git clone https://github.com/kid-sid/codex-spellbook.git
@@ -30,6 +32,22 @@ codex_hooks = true
 EOF
 ```
 
+### Windows (PowerShell)
+
+```powershell
+# 1. Clone the spellbook
+git clone https://github.com/kid-sid/codex-spellbook.git
+cd codex-spellbook
+
+# 2. Install all skills + hooks globally
+pwsh tools/install.ps1 -Global -AllSkills -Hooks
+
+# 3. Enable hooks (one-time per machine)
+$config = Join-Path $HOME ".codex\\config.toml"
+if (-not (Test-Path $config)) { New-Item -ItemType File -Force -Path $config | Out-Null }
+Add-Content $config \"`n[features]`ncodex_hooks = true`n\"
+```
+
 Done. Open any repo in Codex and the skills activate automatically based on your task.
 
 ---
@@ -37,6 +55,8 @@ Done. Open any repo in Codex and the skills activate automatically based on your
 ## Option B — Single project install
 
 Scoped to one repo. Good for team projects where you don't want to touch `~/.agents`.
+
+### macOS / Linux (bash)
 
 ```bash
 cd /path/to/your-project
@@ -68,11 +88,25 @@ codex_hooks = true
 EOF
 ```
 
+### Windows (PowerShell)
+
+```powershell
+$target = \"C:\\path\\to\\your-project\"
+pwsh tools/install.ps1 -Project -AllSkills -Hooks -AgentTemplate python-api -Target $target
+
+# Enable hooks (one-time per machine)
+$config = Join-Path $HOME \".codex\\config.toml\"
+if (-not (Test-Path $config)) { New-Item -ItemType File -Force -Path $config | Out-Null }
+Add-Content $config \"`n[features]`ncodex_hooks = true`n\"
+```
+
 ---
 
 ## Option C — Full team setup (commit to the repo)
 
 Commit `.agents/skills/` and `.codex/hooks.json` so every team member gets the same setup automatically when they open the project in Codex.
+
+### macOS / Linux (bash)
 
 ```bash
 cd /path/to/your-project
@@ -92,6 +126,15 @@ cp -r /path/to/codex-spellbook/hooks/scripts .codex/
 # 4. Commit everything
 git add .agents/ .codex/ AGENTS.md
 git commit -m "chore: add codex-spellbook skills and hooks"
+```
+
+### Windows (PowerShell)
+
+```powershell
+$target = \"C:\\path\\to\\your-project\"
+pwsh tools/install.ps1 -Project -AllSkills -Hooks -AgentTemplate typescript-api -Target $target
+git -C $target add .agents .codex AGENTS.md
+git -C $target commit -m \"chore: add codex-spellbook skills and hooks\"
 ```
 
 Each team member still needs `[features] codex_hooks = true` in their own `~/.codex/config.toml` to activate hooks — that's a machine setting, not a repo setting.
@@ -178,4 +221,11 @@ python -c "import json; json.load(open('.codex/hooks.json')); print('OK')"
 python scripts/validate_skills.py
 python scripts/validate_task_prompts.py
 python scripts/validate_agent_templates.py
+```
+
+Windows alternative (no `make`, no `python3` on PATH):
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts\\validate.ps1
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts\\lint.ps1
 ```

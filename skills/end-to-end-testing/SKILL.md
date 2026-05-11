@@ -38,7 +38,7 @@ BAD
 ```ts
 // Flaky and coupled to implementation
 await page.click('.login-submit');
-await page.waitForTimeout(5000); 
+await page.waitForTimeout(5000);
 expect(await page.url()).toContain('/dashboard');
 ```
 
@@ -74,3 +74,4 @@ await expect(page.getByText(/welcome back/i)).toBeVisible();
 - [ ] Test data is isolated to prevent parallel run conflicts
 - [ ] Parallelism is enabled and tuned for CI resources
 - [ ] Senseless "Wait for X seconds" are replaced with "Wait for Locator"
+

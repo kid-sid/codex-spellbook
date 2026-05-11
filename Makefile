@@ -1,4 +1,10 @@
-PYTHON ?= python3
+PYTHON ?= $(shell \
+	command -v python3 >/dev/null 2>&1 && echo python3 || \
+	command -v python  >/dev/null 2>&1 && echo python  || \
+	command -v py      >/dev/null 2>&1 && echo py      || \
+	( test -n "$$USERPROFILE" && test -x "$$USERPROFILE/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe" && echo "$$USERPROFILE/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe" ) || \
+	echo python3 \
+)
 
 .PHONY: help lint validate count
 
