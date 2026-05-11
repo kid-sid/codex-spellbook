@@ -20,6 +20,10 @@ into a precision engineering assistant — one spell at a time.
 
 ---
 
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=kid-sid/codex-spellbook&type=Date)](https://star-history.com/#kid-sid/codex-spellbook&Date)
+
 ## What's In The Box
 
 | Layer | What | Count |
